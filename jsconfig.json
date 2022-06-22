@@ -1,0 +1,9 @@
+{
+	//让别名路径 @ 能够给出提示
+	"compilerOptions": {
+	  "baseUrl": "./",
+	  "paths": {
+		"@/*": ["src/*"] //表示 src 的提示
+	  }
+	}
+  }
