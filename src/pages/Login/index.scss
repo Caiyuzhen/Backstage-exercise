@@ -1,3 +1,5 @@
+$color-text: #6f6e73;
+
 .login{
 	width: 100%;
 	height: 100%;
@@ -7,12 +9,6 @@
 	background:center/cover url('~@/assets/bg-login.png')
 }
 
-.login-logo{
-	width:200px;
-	height:52px;
-	display:block;
-	margin: 0 auto 20px;
-}
 
 .login-container{
 	width:480px;
@@ -22,9 +18,27 @@
 	top:50%;
 	transform: translate(-50%, -50%);
 	box-shadow:0 0 50px rgba(0 0 0 / 10%);
+	
+	.login-logo{
+		width:200px;
+		height:52px;
+		display:block;
+		margin: 0 auto 20px;
+	}
+	
+	.login-inputBar{
+		border-radius:0.5rem;
+	}
+		
+	.login-checkbox-label{
+		color: $color-text;
+	}
+	
+	.login-btn{
+		margin-top: 1rem;
+		border: none;
+		border-radius:0.5rem;
+	}
 }
 
-.login-checkbox-label{
-	color: #9b18ff;
-}
 
