@@ -2,8 +2,27 @@ import { Card } from 'antd'
 import logo from '@/assets/logo-redux.png'
 import './index.scss'//导入样式文件
 import { Button, Checkbox, Form, Input } from 'antd';
+import { useStore } from '@/store'
+
+
+
 
 function Login (){
+
+	const { loginStore } = useStore() //🌟解构赋值，因为这里边也包含了 loginStore 类的方法
+
+	//提交输入框后的函数
+	function onFinish(values){ //value 放置的是表单项中所有用户输入的内容（ant 封装好了）
+
+		//🔥🔥🔥🔥调用在 store 打包好的方法
+		loginStore.getToken({
+			mobile: values.usename,
+			code:   values.password
+		})
+		console.log(values);
+	}
+
+
 	return (
 		<div className="login">
 			{/* 渲染 antd 的卡片 */}
@@ -18,7 +37,7 @@ function Login (){
 						remember: true, 
 						password:'12345678'
 						}}
-					
+					onFinish={onFinish} //输入完成后的回调函数
 					> 
 				
 					{/* 手机号框 */}
@@ -34,7 +53,10 @@ function Login (){
 								message: 'Please enter correct phone number!'
 							}
 						]}>
+
 						<Input className="login-inputBar" size="large" placeholder="Input your phone number"/>
+
+						
 					</Form.Item>
 					
 					{/* 密码框 */}
