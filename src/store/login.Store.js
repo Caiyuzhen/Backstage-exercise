@@ -1,14 +1,14 @@
-//login module
+//login module 的数据模型
 import { makeAutoObservable } from 'mobx';
-import { http } from '@/utils'
+import { http,setToken,getToken } from '@/utils'
 
 
 
 class LoginStore {
-	token = ''
+	token = getToken() || ''//短路运算符:第一个为真则执行第一个的结果，在【初始化】之前，调用本地的 token，如果没有的话才给它空值
 
+	//初始化处理，响应式数据
 	constructor(){
-		//响应式的处理
 		makeAutoObservable(this)
 	}
 
@@ -19,8 +19,13 @@ class LoginStore {
 		const res = await http.post('http://geek.itheima.net/v1_0/authorizations',{
 			mobile,code
 		})
-		//拿到 token 并存入 token 数据
-		this.token = res.data
+		
+		//拿到 token 并往【内存】存入 token 数据
+		this.token = res.data.token
+		
+		//把 token 存入 localStorage
+		setToken(this.token)
+			
 	}
 }
 

@@ -1,25 +1,37 @@
+//登录模块业务组件
+
 import { Card } from 'antd'
 import logo from '@/assets/logo-redux.png'
-import './index.scss'//导入样式文件
-import { Button, Checkbox, Form, Input } from 'antd';
+import './index.scss'   //导入样式文件
+import { Button, Checkbox, message, Form, Input } from 'antd';
 import { useStore } from '@/store'
+import { useNavigate } from 'react-router-dom'  //路由导航
 
 
 
 
 function Login (){
 
-	const { loginStore } = useStore() //🌟解构赋值，因为这里边也包含了 loginStore 类的方法
-
-	//提交输入框后的函数
-	function onFinish(values){ //value 放置的是表单项中所有用户输入的内容（ant 封装好了）
-		
-		loginStore.getToken({//🔥🔥🔥🔥调用在 store 打包好的方法
-			mobile: values.mobile,
-			code:   values.code,
-			remember: true,
-		})
+	const { loginStore } = useStore() //🌟解构赋值，因为这里返回的是 index 实例对象，边也包含了 loginStore 类的方法
+	const navigate = useNavigate() //🌟路由导航的 hook
+	
+	//提交输入框后的异步函数
+	async function onFinish(values){ //value 放置的是表单项中所有用户输入的内容（ant 封装好了）
 		console.log(values);
+		
+		try{//成功的情况
+			await loginStore.getToken({//🔥🔥🔥🔥调用在 store 打包好的方法
+				mobile: values.mobile,
+				code:   values.code,
+			})
+			//跳转到首页
+			navigate('/', { replace: true })//true 为替换为 /路径 而不是覆盖
+			// 提示用户
+			message.success('Login success!')
+			
+		} catch(e) {//失败的提示
+			message.error(e.response?.data?.message ||'Error!')
+		}
 	}
 
 
@@ -33,9 +45,10 @@ function Login (){
 				<Form 
 					//总的配置项:子项用到的配置项都需要在 Form 这里集中声明一下
 					validateTrigger={['onBlur', 'onChange']} //失焦的时候就开始校验
-					initialValues={{  //记住默认的密码
-					  remember: true, 
-					  password:'12345678'
+					initialValues={{  //🔥默认填入的预设密码，注意，这里 mock 的数据里 246810 才是正确的
+					  remember: true,
+					  mobile: '13811111111',
+                      code: '246810'
 					}}
 					onFinish={onFinish} //输入完成后的回调函数
 				> 
@@ -65,9 +78,9 @@ function Login (){
 								required: true, 
 								message: 'Please input your password!'
 							},{
-								len:8,//至少需要 8 位数字
+								len:6,//至少需要 6 位数字
 								validateTrigger:'onBlur', //触发时机
-								message: 'Please enter an 8-digit password'
+								message: 'Please enter an 6-digit password'
 							}
 						]}>
 						<Input className="login-inputBar" size="large" placeholder="Input the characters"/>
