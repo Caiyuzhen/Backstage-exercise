@@ -1,0 +1,61 @@
+$color-sidebar: #11102a;
+$color-topbar: #ff967e;
+$user-info-text: #fff6f4;
+
+.ant-layout {
+	height: 100%;
+
+	.header {
+		padding: 0;
+
+		.layout-content {
+			overflow-y: auto;
+		}
+	
+		.logo {
+			// background-size: length | percentage | cover | contain;
+			background-size:contain;
+			width: 200px;
+			height: 32px;	
+			// border:1px solid red;
+			padding: 62px 0px 0px 8px;		
+			background: 
+				url('~@/assets/logo-redux.png') 
+				no-repeat center / 120px auto;
+			// filter: invert(100%);//反色
+		}
+
+		
+		.user-info {
+			position: absolute;
+			right: 0;
+			top: 0;
+			padding-right: 20px;
+			color: $user-info-text;
+			font-weight: bold;
+
+			.user-name {
+				margin-right: 20px;
+			}
+
+			.user-logout {
+				display: inline-block;
+				cursor: pointer;
+			}
+		}
+	}
+
+	.ant-layout-header {
+		padding: 0 !important;
+		background: $color-topbar !important;
+	}
+	
+
+	.menu-background{
+		background: $color-sidebar !important;
+	}
+
+	.menuitem:nth-of-type(2){
+		color: $user-info-text !important;
+	}
+}
