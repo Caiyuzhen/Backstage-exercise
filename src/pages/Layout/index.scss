@@ -1,6 +1,7 @@
-$color-sidebar: #11102a;
-$color-topbar: #ff967e;
-$user-info-text: #fff6f4;
+$color-topbar: #230078;
+$user-info-text: #fae7f1;
+$color-sidebar: #160143;
+$color-sidebar-items:#5b84f4;
 
 .ant-layout {
 	height: 100%;
@@ -22,7 +23,7 @@ $user-info-text: #fff6f4;
 			background: 
 				url('~@/assets/logo-redux.png') 
 				no-repeat center / 120px auto;
-			// filter: invert(100%);//反色
+			filter: invert(100%);//反色
 		}
 
 		
@@ -55,7 +56,11 @@ $user-info-text: #fff6f4;
 		background: $color-sidebar !important;
 	}
 
-	.menuitem:nth-of-type(2){
+	.menuitem{
 		color: $user-info-text !important;
+	}
+	
+	.ant-menu-item-selected{//覆盖了 ant 的选中态
+		background: $color-sidebar-items !important;
 	}
 }
