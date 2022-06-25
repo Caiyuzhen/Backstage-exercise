@@ -1,6 +1,6 @@
 //login module 的数据模型
 import { makeAutoObservable } from 'mobx';
-import { http,setToken,getToken } from '@/utils'
+import { http,setToken,getToken,removeToken } from '@/utils'
 
 
 
@@ -24,8 +24,13 @@ class LoginStore {
 		this.token = res.data.token
 		
 		//把 token 存入 localStorage
-		setToken(this.token)
-			
+		setToken(this.token)		
+	}
+
+	//👇定义删除 token 的方法(注意，这里不能用导航到登录页的 useNavigate 方法，因为这个也是 hook 组件！只能在函数内使用！)
+	deleteToken = () => {
+		this.token = ''//删除内存中的 token
+		removeToken()//删除本地浏览器 token
 	}
 }
 
