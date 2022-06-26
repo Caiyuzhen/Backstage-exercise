@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route,unstable_HistoryRouter as HistoryRouter } from 'react-router-dom' // XXX as XXX 是重命名
+import { history } from './utils/history'
 import Layout from './pages/Layout'
 import { Button } from 'antd'
 import Login from '@/pages/Login'  //别名路径的方式
@@ -11,13 +12,14 @@ import Home from './pages/Home'
 
 
 
+
 //配置路由——————————————————————————————————————————————————————
 
-function App ()
-{
+function App (){
 	return (
-		//路由配置（包裹）
-		<BrowserRouter>
+		//路由配置（包裹）,<BrowserRouter>为不带历史记录的包裹方式, <HistoryRouter> 为带历史记录的包裹方式
+		// <BrowserRouter>
+		<HistoryRouter history={history}>
 			<div className="App">
 				{/* 一级路由出口 */}
 				<Routes>
@@ -32,7 +34,8 @@ function App ()
 					<Route path='/login'  element={ <Login /> }>  </Route>
 				</Routes>
 			</div>
-		</BrowserRouter>
+		</HistoryRouter>
+		// </BrowserRouter>
 	)
 }
 
