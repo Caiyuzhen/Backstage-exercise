@@ -1,17 +1,22 @@
-$color-topbar: #230078;
+$color-topbar: linear-gradient(to right,#28007e, #5974ff, #fc5c7d,);
 $user-info-text: #fae7f1;
-$color-sidebar: #160143;
+$color-sidebar: linear-gradient(to bottom right, #5f2c82, #5974ff);
 $color-sidebar-items:#5b84f4;
+$main-background-color:#f2f0ff;
+
+
 
 .ant-layout {
+	//整体特性
 	height: 100%;
+	background-color: $main-background-color !important;
+	overflow-y: hidden;//禁止纵向滚动 ( 父元素禁止，子元素可以开启滚动！)
 
+
+	// 顶部布局————————————————————————————————————————
 	.header {
-		padding: 0;
-
-		.layout-content {
-			overflow-y: auto;
-		}
+		padding: 0 !important;
+		background: $color-topbar !important; //渐变色
 	
 		.logo {
 			// background-size: length | percentage | cover | contain;
@@ -25,8 +30,7 @@ $color-sidebar-items:#5b84f4;
 				no-repeat center / 120px auto;
 			filter: invert(100%);//反色
 		}
-
-		
+	
 		.user-info {
 			position: absolute;
 			right: 0;
@@ -34,11 +38,11 @@ $color-sidebar-items:#5b84f4;
 			padding-right: 20px;
 			color: $user-info-text;
 			font-weight: bold;
-
+	
 			.user-name {
 				margin-right: 20px;
 			}
-
+	
 			.user-logout {
 				display: inline-block;
 				cursor: pointer;
@@ -46,21 +50,28 @@ $color-sidebar-items:#5b84f4;
 		}
 	}
 
-	.ant-layout-header {
-		padding: 0 !important;
-		background: $color-topbar !important;
+
+	//底部布局————————————————————————————————————————
+	//内容
+	.layout-content {
+		// float: left;
+		overflow-y: auto;//让文章区域可以滚动
 	}
 	
-
-	.menu-background{
-		background: $color-sidebar !important;
-	}
-
-	.menuitem{
-		color: $user-info-text !important;
-	}
+	//菜单
+	.ant-layout-sider-children{
+		.menu-background{
+			background: $color-sidebar !important;
+		}
 	
-	.ant-menu-item-selected{//覆盖了 ant 的选中态
-		background: $color-sidebar-items !important;
+		.menuitem{
+			color: $user-info-text !important;
+		}
+		
+		.ant-menu-item-selected{//覆盖了 ant 的选中态
+			background: $color-sidebar-items !important;
+			opacity: 0.8;
+		}
 	}
+
 }
