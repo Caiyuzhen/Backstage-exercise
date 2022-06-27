@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
-import { Card, Breadcrumb, Form, Button, Radio, DatePicker, Select, Table, Tag, Space } from 'antd'
+import { Card, Breadcrumb, Form, Button, Radio, DatePicker, Select, Table, Tag, Space, Popconfirm } from 'antd'
+import { EditOutlined, DeleteOutlined, LogoutOutlined } from '@ant-design/icons'
 import 'moment/locale/zh-cn'//配置成中文
 import locale from 'antd/es/date-picker/locale/zh_CN'//配置成当地的语言-中文
 import './index.scss'
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import img404 from '@/assets/placeholde-error.png'
 import { useEffect, useState } from 'react'
 import { http } from '@/utils'
@@ -94,7 +94,7 @@ const Article = () =>{
 			...params,
 			...btn_params
 		}) //🍎setState 的方法是整体覆盖, 所以这里需要合并 【page、count 两个参数】 + 【btn_params 过滤按钮增加的参数】
-		
+	
 	}
 	
 	
@@ -106,10 +106,25 @@ const Article = () =>{
 			page //🔥把新的 page 输入传回给 params，这样重新渲染为当前对应的分页（因为依赖项是 params 的变化！）
 		})
 	}
+
+
+	//❌删除 table 内 Article 数据的方法
+	const deleteArticle = async(data) => {
+		await http.delete(`/mp/articles/${data.id}`)//⚡️⚡️获取当前列的 id , 调用删除接口 并提交给后端！
+		console.log(data);
+		console.log("成功发送删除接口")
+
+		//删除后更新视图
+		setParams({
+			...params,
+			page:1 //删除后重新获取第一页数据
+		})
+	}
+
 	
 	
 	
-	//很关键，这里为 table 的数据结构，其中的 key 跟后端返回的 key 是配的
+	//🔥🔥很关键，这里为 table 的数据结构(包含了删除按钮！), 其中的 key 跟后端返回的 key 匹配的
 	const columnsTitle = [ 
 		{
 			title:'封面',
@@ -146,18 +161,31 @@ const Article = () =>{
 			dataIndex: 'like_count'
 		  },
 		  {
-			title: '操作',
+			title: '操作',//渲染操作按钮！！
 			render: data => {
 			  return (
 				<Space size="middle">
 					{/* 两个操作按钮 */}
-				  <Button type="primary" shape="circle" icon={<EditOutlined />} />
-				  <Button
-					type="primary"
-					danger
-					shape="circle"
-					icon={<DeleteOutlined />}
-				  />
+				    <Button type="primary" shape="circle" icon={<EditOutlined />} />
+
+				    		{/* 用 pop 组件包裹 button, 点击删除按钮后2会唤起 pop 确认提示 */}
+					<Popconfirm 
+						title="Confirm to delete article？" 
+						placement="topRight"
+						onConfirm={()=>deleteArticle(data)} //🍎需要二次确认的写法, 在 pop 上进行确认
+						okText="Confirm"
+						cancelText="Cancel"
+						>
+							{/* 点击删除按钮后, 获取当前列的 id, 调用删除 api 接口请求, 更新渲染视图 */}
+							<Button
+								type="primary"
+								danger 
+								shape="circle"
+								icon={<DeleteOutlined />}
+								//🍎不用二次确认的写法: onClick={()=>deleteArticle(data)}//获得当前列的 data, 传入到删除方法当中
+							>
+							</Button>
+					</Popconfirm>
 				</Space>
 			  )
 			}
