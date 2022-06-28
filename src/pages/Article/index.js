@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Card, Breadcrumb, Form, Button, Radio, DatePicker, Select, Table, Tag, Space, Popconfirm } from 'antd'
 import { EditOutlined, DeleteOutlined, LogoutOutlined } from '@ant-design/icons'
 import 'moment/locale/zh-cn'//配置成中文
@@ -8,6 +8,7 @@ import img404 from '@/assets/placeholde-error.png'
 import { useEffect, useState } from 'react'
 import { http } from '@/utils'
 import Item from 'antd/lib/list/Item'
+import { useNavigation } from 'framer'
 
 
 const { Option } = Select
@@ -121,6 +122,15 @@ const Article = () =>{
 		})
 	}
 
+
+	//🖌跳转到 article 去编辑
+	const navigate = useNavigate()//🔥🔥🔥🔥🔥注意，【hook 函数】只能放在函数外边，不能放里边！
+
+	const goToPublish = (data) => {
+		//跳转到编辑页
+		navigate(`/publish?id=${data.id}`) //传入当前的列表 id
+	}
+
 	
 	
 	
@@ -165,8 +175,13 @@ const Article = () =>{
 			render: data => {
 			  return (
 				<Space size="middle">
-					{/* 两个操作按钮 */}
-				    <Button type="primary" shape="circle" icon={<EditOutlined />} />
+					{/* 点击编辑按钮后，跳转到发布页，需要携带【当前列表的 id 参数】*/}
+				    <Button 
+						type="primary" 
+						shape="circle" 
+						icon={<EditOutlined />} 
+						onClick={()=>goToPublish(data)}//🍎绑定跳转功能, 需要传入 data, 获取当前列的 id
+						/>
 
 				    		{/* 用 pop 组件包裹 button, 点击删除按钮后2会唤起 pop 确认提示 */}
 					<Popconfirm 
@@ -228,7 +243,7 @@ const Article = () =>{
 				style={{ margin:"0.75rem", marginBottom:"1.5rem", borderRadius:"1rem"}}
 				>
 					
-				{/* 过滤项 */}
+				{/* 过滤项, 🔥🔥🔥onFinish 是用来搜集表单组件内的所有值 */}
 				<Form  onFinish={onFilter} initialValues={{status:null}}>
 					<Form.Item babel="状态" name="status" style={{marginLeft:"0.75rem"}}>
 						<Radio.Group>

@@ -1,0 +1,19 @@
+.publish {
+	position: relative;
+
+	//富文本编辑器样式
+	.ql-container {
+		min-height: 200px;
+	  }
+}
+
+//覆盖 ant 的样式
+.ant-upload-list {
+	.ant-upload-list-picture-card-container,
+	.ant-upload-select {
+		width: 146px;
+		height: 146px;
+	}
+}
+
+
