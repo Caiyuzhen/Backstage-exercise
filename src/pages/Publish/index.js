@@ -4,6 +4,9 @@ import { PlusOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { useStore } from '@/store';
+import { observer } from 'mobx-react-lite';
+import { useState } from 'react';
 
 
 // function Publish(){}
@@ -11,7 +14,17 @@ import 'react-quill/dist/quill.snow.css';
 //🔥🔥记得解构出下拉菜单的选项！
 const { Option } = Select
 
+
 const Publish = () =>{
+
+	const { channelStore } = useStore()
+
+	const[fileList, setFileList] = useState([])//存放上传图片的列表(图片是一个数组)
+	const onUploadChange = (result) =>{//上传图片的方法，接收返回值
+		console.log(result);
+		setFileList(fileList)
+	}
+
 	return(
 		<div className='publish'>
 			<Card
@@ -47,7 +60,11 @@ const Publish = () =>{
 						name="channel_id"  
 						rules={[{required:true , message:'请选择文章频道'}]}>
 							<Select placeholder='请输入文章标题' style={{witch:400}}>
-								<Option value={0}>推荐</Option>
+
+								{/* 渲染 api 返回的 channel 数据 */}
+								{channelStore.channelList.map( channel => 
+									<Option value={channel.id} key={channel.id}> {channel.name} </Option>
+								)}
 							</Select>
 					</Form.Item>
 
@@ -61,9 +78,17 @@ const Publish = () =>{
 							</Radio.Group>
 						</Form.Item>
 
-						<Upload name="image" listType='picture-card' className='avatar-uploader' showUploadList>
-							{/* icon */}
-							<div style={{ marginTop: 8 }}><PlusOutlined/></div>
+						<Upload 
+							name="image" 
+							listType='picture-card' 
+							className='avatar-uploader' 
+							showUploadList
+							action="http://geek.itheima.net/v1_0/upload"//调用上传接口
+							fileList={fileList}
+							onChange={onUploadChange}//上传列表发生变化后会执行这个回调，然后我们要存在 mobx ，把这个状态告诉后端
+							>
+								{/* icon */}
+								<div style={{ marginTop: 8 }}><PlusOutlined/></div>
 						</Upload>
 					</Form.Item>
 					
@@ -91,4 +116,4 @@ const Publish = () =>{
 	)
 }
 
-export default Publish
+export default observer(Publish)

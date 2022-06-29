@@ -23,7 +23,7 @@ function MainLayout() {
 	//利用函数的副作用 hook 来获取用户信息、article 信息(只执行一次)
 	useEffect(()=>{
 		userInfoStore.getUserInfo() //🔥🔥🔥 从 userInfoStore 组件中调用 getUserInfo() 方法来获取接口内的参数
-		channelStore.loadChannelList()
+		channelStore.loadChannelList()//发起请求，获取 channel 数据
 		// console.log(userInfoStore.userInfo.name) //在函数初始化的时候会自动执行，所以已经拿到值了
 	},[userInfoStore,channelStore]) //拿到数据，再去 <span></span> 内进行渲染
 

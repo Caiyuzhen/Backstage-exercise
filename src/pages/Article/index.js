@@ -10,7 +10,7 @@ import { http } from '@/utils'
 import Item from 'antd/lib/list/Item'
 import { useNavigation } from 'react-router-dom'
 import { useStore } from '@/store'
-import { observer } from 'mobx-react-lite'
+import { observer } from 'mobx-react-lite' //中间件
 
 
 const { Option } = Select
@@ -20,19 +20,20 @@ const { RangePicker } = DatePicker
 
 
 const Article = () =>{
-	const { ChannelStore } = useStore() //解构出 ChannelStore 这个方法
+
+	const { channelStore } = useStore() //先在 layout 发起请求，再在这里解构出 channelStore 这个方法
 	
-	//👇👇👇渲染下拉菜单的频道列表(数据存储在函数内的方式):——————————————————————————————————————————————————
-	// //步骤一: 初始化时去实例化列表的临时数据(用 setCahnnelList 把数据放入 useState([]) 这个空数组中，并且解构赋值给 channelList) 
+	//👇👇👇渲染下拉菜单的 channel 列表(数据存储在函数内的方式):——————————————————————————————————————————————————
+		// //步骤一: 初始化时去实例化列表的临时数据(用 setChannelList 把数据放入 useState([]) 这个空数组中，并且解构赋值给 channelList) 
 	// const [channelList, setChannelList] = useState([])
 
-	// //步骤二: 声明一个异步函数调用后端接口（🌟不传参的方式, 没有依赖项, 可以写在外部，一般都是同意放到 useEffect 内的）
+	  		 	 // //步骤二: 声明一个异步函数调用后端接口（🌟不传参的方式, 没有依赖项, 可以写在外部，一般都是同意放到 useEffect 内的）
 	// const loadChannelList = async() =>{
 	// 	const ref = await http.get('/channels')//定义一个变量来接收后端接口 url 返回的数据！
 	// 	setChannelList(ref.data.channels) //⚡️用 hook 来把从 api 中获取的数据放入 channelList 中
 	// }
 
-	// //步骤三: 实例化调用接口的方法，获得数据(注意，useEffect 这里边不能用 async！)
+	    // //步骤三: 实例化调用接口的方法，获得数据(注意，useEffect 这里边不能用 async！)
 	// useEffect(()=>{
 	// 	loadChannelList()
 	// },[])
@@ -268,8 +269,8 @@ const Article = () =>{
 								<Option value={channel.id} key={channel.id}> {channel.name} </Option>
 							)} */}
 							{/* 数据存在 mobx Store 的写法 */}
-							{ChannelStore.channelList.map( channnel => 
-								<Option value={channnel.id} key={channnel.id}> {channnel.name} </Option>
+							{channelStore.channelList.map( channel => 
+								<Option value={channel.id} key={channel.id}> {channel.name} </Option>
 							)}
 						</Select>
 					</Form.Item>
