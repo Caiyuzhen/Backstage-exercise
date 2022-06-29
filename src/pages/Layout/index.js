@@ -11,20 +11,21 @@ const { Header , Sider } = Layout  //Layout 包含了 header Sidebar Content Foo
 
 
 
+
 function MainLayout() {
 
 	// const  pathLocation  = useLocation() //这是定义一个变量，跟用对象来解构赋值不一样,先用这个方式可以看到这个变量里边有什么对象，然后再去解构赋值
 	// console.log(pathLocation);
 	const { pathname } = useLocation() //从 react 组件中解构出 pathname 的值
-	const { userInfoStore,loginStore } = useStore() //从根 store 中解构出 {userInfoStore} 、{loginStore} 两个对象
+	const { userInfoStore, loginStore, channelStore } = useStore() //从根 store 中解构出 {userInfoStore} 、{loginStore} 两个对象
 	const navigate = useNavigate()
 
-	//利用函数的副作用 hook 来获取用户信息
+	//利用函数的副作用 hook 来获取用户信息、article 信息(只执行一次)
 	useEffect(()=>{
 		userInfoStore.getUserInfo() //🔥🔥🔥 从 userInfoStore 组件中调用 getUserInfo() 方法来获取接口内的参数
-		console.log(userInfoStore.userInfo.name) //在函数初始化的时候会自动执行，所以已经拿到值了
-
-	},[userInfoStore]) //拿到数据，再去 <span></span> 内进行渲染
+		channelStore.loadChannelList()
+		// console.log(userInfoStore.userInfo.name) //在函数初始化的时候会自动执行，所以已经拿到值了
+	},[userInfoStore,channelStore]) //拿到数据，再去 <span></span> 内进行渲染
 
 	
 	//气泡框，确定退出登录

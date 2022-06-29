@@ -8,29 +8,34 @@ import img404 from '@/assets/placeholde-error.png'
 import { useEffect, useState } from 'react'
 import { http } from '@/utils'
 import Item from 'antd/lib/list/Item'
-import { useNavigation } from 'framer'
+import { useNavigation } from 'react-router-dom'
+import { useStore } from '@/store'
+import { observer } from 'mobx-react-lite'
 
 
 const { Option } = Select
 const { RangePicker } = DatePicker
 
 
+
+
 const Article = () =>{
+	const { ChannelStore } = useStore() //解构出 ChannelStore 这个方法
+	
+	//👇👇👇渲染下拉菜单的频道列表(数据存储在函数内的方式):——————————————————————————————————————————————————
+	// //步骤一: 初始化时去实例化列表的临时数据(用 setCahnnelList 把数据放入 useState([]) 这个空数组中，并且解构赋值给 channelList) 
+	// const [channelList, setChannelList] = useState([])
 
-	//👇👇👇渲染下拉菜单的频道列表:——————————————————————————————————————————————————
-	//步骤一: 初始化时去实例化列表的临时数据(用 setCahnnelList 把数据放入 useState([]) 这个空数组中，并且解构赋值给 channelList) 
-	const [channelList, setChannelList] = useState([])
+	// //步骤二: 声明一个异步函数调用后端接口（🌟不传参的方式, 没有依赖项, 可以写在外部，一般都是同意放到 useEffect 内的）
+	// const loadChannelList = async() =>{
+	// 	const ref = await http.get('/channels')//定义一个变量来接收后端接口 url 返回的数据！
+	// 	setChannelList(ref.data.channels) //⚡️用 hook 来把从 api 中获取的数据放入 channelList 中
+	// }
 
-	//步骤二: 声明一个异步函数调用后端接口（🌟不传参的方式, 没有依赖项, 可以写在外部，一般都是同意放到 useEffect 内的）
-	const loadChannelList = async() =>{
-		const ref = await http.get('/channels')//定义一个变量来接收后端接口 url 返回的数据！
-		setChannelList(ref.data.channels) //⚡️用 hook 来把从 api 中获取的数据放入 channelList 中
-	}
-
-	//步骤三: 实例化调用接口的方法，获得数据(注意，useEffect 这里边不能用 async！)
-	useEffect(()=>{
-		loadChannelList()
-	},[])
+	// //步骤三: 实例化调用接口的方法，获得数据(注意，useEffect 这里边不能用 async！)
+	// useEffect(()=>{
+	// 	loadChannelList()
+	// },[])
 
 
 
@@ -41,7 +46,7 @@ const Article = () =>{
 		count:0		//文章总数，结合下边的 table 分页来配置！（⚡️总数 / 每页显示的数量）
 	})
 
-	//步骤一(2): 参数：（状态、分页）会影响到 table 列表的数据变化的都需要定义一个变量来管理
+	//步骤一(2): 参数管理：（状态、分页）会影响到 table 列表的数据变化的都需要定义一个变量来管理
 	const [params, setParams] = useState({ //params 用作 api 发送请求的携带参数
 		page:1,			//当前页
 		per_page:5,	//每页显示条数, 结合下边的 table 分页来配置！（⚡️总数 / 每页显示的数量）
@@ -225,8 +230,6 @@ const Article = () =>{
 
 
 
-
-
 	return (
 		<div>
 			{/* 顶部筛选区域 —————————————————————————————————————————————————————————— */}
@@ -260,8 +263,13 @@ const Article = () =>{
 						<Select placeholder="Select article channel" style={{width:'18rem'}}>
 
 							{/* //👇👇👇渲染下拉菜单的频道列表 -- 步骤四：渲染筛选下拉菜单的数据 */}
-							{channelList.map( channel =>
+							{/* 数据存在函数的写法 */}
+							{/* {channelList.map( channel =>
 								<Option value={channel.id} key={channel.id}> {channel.name} </Option>
+							)} */}
+							{/* 数据存在 mobx Store 的写法 */}
+							{ChannelStore.channelList.map( channnel => 
+								<Option value={channnel.id} key={channnel.id}> {channnel.name} </Option>
 							)}
 						</Select>
 					</Form.Item>
@@ -303,8 +311,8 @@ const Article = () =>{
 	)
 }
 
-export default Article
-
+// export default Article
+export default observer(Article)//注意，实时同步 mobx 的数据要加 observe
 
 
 
