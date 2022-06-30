@@ -1,0 +1,339 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor",
+  "elements": [
+    {
+      "id": "IFSmuRfOTbeZpmJoZuqfQ",
+      "type": "ellipse",
+      "x": 303.5546875,
+      "y": 225.3258056640625,
+      "width": 162.880859375,
+      "height": 162.880859375,
+      "angle": 0,
+      "strokeColor": "#000000",
+      "backgroundColor": "transparent",
+      "fillStyle": "hachure",
+      "strokeWidth": 1,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "strokeSharpness": "sharp",
+      "seed": 1271468579,
+      "version": 90,
+      "versionNonce": 1846125453,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "G4AScpQB4yluUiLHl1e3r"
+        },
+        {
+          "id": "GethclMkwKCdkSzQZQGJg",
+          "type": "arrow"
+        }
+      ],
+      "updated": 1656599835497,
+      "link": null,
+      "locked": false,
+      "fontSize": 21.997245953237393,
+      "baseline": 144.880859375
+    },
+    {
+      "id": "G4AScpQB4yluUiLHl1e3r",
+      "type": "text",
+      "x": 308.5546875,
+      "y": 296.7662353515625,
+      "width": 153,
+      "height": 20,
+      "angle": 0,
+      "strokeColor": "#000000",
+      "backgroundColor": "transparent",
+      "fillStyle": "hachure",
+      "strokeWidth": 1,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "strokeSharpness": "sharp",
+      "seed": 1815182989,
+      "version": 133,
+      "versionNonce": 1116609859,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1656599809676,
+      "link": null,
+      "locked": false,
+      "text": "声明一个 useState",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "baseline": 14,
+      "containerId": "IFSmuRfOTbeZpmJoZuqfQ",
+      "originalText": "声明一个 useState"
+    },
+    {
+      "type": "ellipse",
+      "version": 223,
+      "versionNonce": 730339363,
+      "isDeleted": false,
+      "id": "Hs0MFGDmsTEt0T5Mcjm7u",
+      "fillStyle": "hachure",
+      "strokeWidth": 1,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "angle": 0,
+      "x": 550.9769607483966,
+      "y": 225.3258056640625,
+      "strokeColor": "#000000",
+      "backgroundColor": "transparent",
+      "width": 162.880859375,
+      "height": 162.880859375,
+      "seed": 1553745037,
+      "groupIds": [],
+      "strokeSharpness": "sharp",
+      "boundElements": [
+        {
+          "id": "T4oRkn3mQL0My-QxFvV1e",
+          "type": "text"
+        },
+        {
+          "type": "text",
+          "id": "T4oRkn3mQL0My-QxFvV1e"
+        },
+        {
+          "id": "GethclMkwKCdkSzQZQGJg",
+          "type": "arrow"
+        },
+        {
+          "id": "Bnycdvubdpj1tAUgIzxXa",
+          "type": "arrow"
+        }
+      ],
+      "updated": 1656599840071,
+      "link": null,
+      "locked": false,
+      "fontSize": 21.997245953237393,
+      "baseline": 144.880859375
+    },
+    {
+      "type": "text",
+      "version": 344,
+      "versionNonce": 368884835,
+      "isDeleted": false,
+      "id": "T4oRkn3mQL0My-QxFvV1e",
+      "fillStyle": "hachure",
+      "strokeWidth": 1,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "angle": 0,
+      "x": 555.9769607483966,
+      "y": 286.7662353515625,
+      "strokeColor": "#000000",
+      "backgroundColor": "transparent",
+      "width": 153,
+      "height": 40,
+      "seed": 2107758275,
+      "groupIds": [],
+      "strokeSharpness": "sharp",
+      "boundElements": [],
+      "updated": 1656599828432,
+      "link": null,
+      "locked": false,
+      "fontSize": 16,
+      "fontFamily": 1,
+      "text": "拿到当前的状态并存\n到 mobxStore 内",
+      "baseline": 34,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "Hs0MFGDmsTEt0T5Mcjm7u",
+      "originalText": "拿到当前的状态并存到 mobxStore 内"
+    },
+    {
+      "type": "ellipse",
+      "version": 313,
+      "versionNonce": 800529347,
+      "isDeleted": false,
+      "id": "HTfOqsor3avf3ilaEMpxS",
+      "fillStyle": "hachure",
+      "strokeWidth": 1,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "angle": 0,
+      "x": 800.4696697860281,
+      "y": 225.3258056640625,
+      "strokeColor": "#000000",
+      "backgroundColor": "transparent",
+      "width": 163,
+      "height": 162.880859375,
+      "seed": 1897117955,
+      "groupIds": [],
+      "strokeSharpness": "sharp",
+      "boundElements": [
+        {
+          "id": "0uc3dKQcxvEHAW1vt1TNo",
+          "type": "text"
+        },
+        {
+          "id": "0uc3dKQcxvEHAW1vt1TNo",
+          "type": "text"
+        },
+        {
+          "type": "text",
+          "id": "0uc3dKQcxvEHAW1vt1TNo"
+        },
+        {
+          "id": "Bnycdvubdpj1tAUgIzxXa",
+          "type": "arrow"
+        }
+      ],
+      "updated": 1656599840071,
+      "link": null,
+      "locked": false,
+      "fontSize": 21.997245953237393,
+      "baseline": 143.880859375
+    },
+    {
+      "type": "text",
+      "version": 507,
+      "versionNonce": 912030541,
+      "isDeleted": false,
+      "id": "0uc3dKQcxvEHAW1vt1TNo",
+      "fillStyle": "hachure",
+      "strokeWidth": 1,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "angle": 0,
+      "x": 805.4696697860281,
+      "y": 286.7662353515625,
+      "strokeColor": "#000000",
+      "backgroundColor": "transparent",
+      "width": 153,
+      "height": 60,
+      "seed": 635604141,
+      "groupIds": [],
+      "strokeSharpness": "sharp",
+      "boundElements": [],
+      "updated": 1656599831226,
+      "link": null,
+      "locked": false,
+      "fontSize": 16,
+      "fontFamily": 1,
+      "text": "通过mobxStore \n的状态改变去更新视\n图",
+      "baseline": 54,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "HTfOqsor3avf3ilaEMpxS",
+      "originalText": "通过mobxStore 的状态改变去更新视图"
+    },
+    {
+      "id": "GethclMkwKCdkSzQZQGJg",
+      "type": "arrow",
+      "x": 487.2167028289784,
+      "y": 306.46866837392594,
+      "width": 44.620505921223355,
+      "height": 2.5331245614203226,
+      "angle": 0,
+      "strokeColor": "#000000",
+      "backgroundColor": "transparent",
+      "fillStyle": "hachure",
+      "strokeWidth": 1,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "strokeSharpness": "round",
+      "seed": 287934893,
+      "version": 43,
+      "versionNonce": 192800707,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1656599835497,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          44.620505921223355,
+          2.5331245614203226
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "IFSmuRfOTbeZpmJoZuqfQ",
+        "focus": -0.07478989740876209,
+        "gap": 20.78158906171214
+      },
+      "endBinding": {
+        "elementId": "Hs0MFGDmsTEt0T5Mcjm7u",
+        "focus": -0.09740571368660922,
+        "gap": 19.164593376151217
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow"
+    },
+    {
+      "type": "arrow",
+      "version": 100,
+      "versionNonce": 1119825805,
+      "isDeleted": false,
+      "id": "Bnycdvubdpj1tAUgIzxXa",
+      "fillStyle": "hachure",
+      "strokeWidth": 1,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "angle": 0,
+      "x": 737.1957574294233,
+      "y": 308.88450218382343,
+      "strokeColor": "#000000",
+      "backgroundColor": "transparent",
+      "width": 44.620505921223355,
+      "height": 2.5331245614203226,
+      "seed": 432214787,
+      "groupIds": [],
+      "strokeSharpness": "round",
+      "boundElements": [],
+      "updated": 1656599840071,
+      "link": null,
+      "locked": false,
+      "startBinding": {
+        "elementId": "Hs0MFGDmsTEt0T5Mcjm7u",
+        "focus": -0.04695318247237535,
+        "gap": 23.359347240711273
+      },
+      "endBinding": {
+        "elementId": "HTfOqsor3avf3ilaEMpxS",
+        "focus": -0.12672452638632836,
+        "gap": 18.761488085176822
+      },
+      "lastCommittedPoint": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          44.620505921223355,
+          2.5331245614203226
+        ]
+      ]
+    }
+  ],
+  "appState": {
+    "gridSize": null,
+    "viewBackgroundColor": "#ffffff"
+  },
+  "files": {}
+}

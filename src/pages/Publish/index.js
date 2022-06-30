@@ -20,10 +20,23 @@ const Publish = () =>{
 	const { channelStore } = useStore()
 
 	const[fileList, setFileList] = useState([])//存放上传图片的列表(图片是一个数组)
-	const onUploadChange = (result) =>{//上传图片的方法，接收返回值
-		console.log(result);
+	const onUploadChange = (result) =>{//上传图片的方法，接收返回值,后端会返回一个对象，包含 url 
 		setFileList(fileList)
+		console.log(result);
 	}
+
+
+	//下面两个函数都是控制试图显示的
+	const [imgCount,setImageCount] = useState(1)//切换图片的 hook 
+
+	const radioChange = (radioData) => {//⚡️切换图片的方法
+		// console.log(radioData.target.value)
+		setImageCount(radioData.target.value)
+	}
+
+	
+
+
 
 	return(
 		<div className='publish'>
@@ -71,25 +84,30 @@ const Publish = () =>{
 					{/* ⚡️单选项一组 */}
 					<Form.Item label="封面">
 						<Form.Item name="type">
-							<Radio.Group>
+							<Radio.Group onChange={radioChange}>
 								<Radio value={1}>单图</Radio>
 								<Radio value={3}>三图</Radio>
 								<Radio value={0}>无图</Radio>
 							</Radio.Group>
 						</Form.Item>
 
-						<Upload 
-							name="image" 
-							listType='picture-card' 
-							className='avatar-uploader' 
-							showUploadList
-							action="http://geek.itheima.net/v1_0/upload"//调用上传接口
-							fileList={fileList}
-							onChange={onUploadChange}//上传列表发生变化后会执行这个回调，然后我们要存在 mobx ，把这个状态告诉后端
-							>
-								{/* icon */}
-								<div style={{ marginTop: 8 }}><PlusOutlined/></div>
-						</Upload>
+
+						{/* 🔥🔥🔥🔥🔥很关键，用于控制视图的显示🔥🔥🔥🔥🔥 */}
+						{imgCount > 0 && (//短路运算符，相当于如果 > 0, 那么就显示上传入口，否则不显示
+							<Upload 
+								name='image'
+								listType='picture-card' 
+								className='avatar-uploader' 
+								showUploadList
+								action="http://geek.itheima.net/v1_0/upload"//调用上传接口
+								fileList={fileList}
+								onChange={onUploadChange}//上传列表发生变化后会执行这个回调，然后我们要存在 mobx ，把这个状态告诉后端
+								multiple={imgCount > 1}//是否支持多传图片, 如果是 3 图 （>1 的情况），那么就是 true
+								maxCount={imgCount}//最多上传几张图片
+								>
+									{/* icon */}
+									<div style={{ marginTop: 8 }}><PlusOutlined/></div>
+							</Upload>)}
 					</Form.Item>
 					
 					<Form.Item
