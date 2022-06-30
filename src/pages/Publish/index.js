@@ -21,7 +21,17 @@ const Publish = () =>{
 
 	const[fileList, setFileList] = useState([])//存放上传图片的列表(图片是一个数组)
 	const onUploadChange = (result) =>{//上传图片的方法，接收返回值,后端会返回一个对象，包含 url 
+		//上传成功后，回调返回 url
+		const fileList = result.filesList.map(file => {
+			if(file.response){
+				return{
+					url: file.response.data.url
+				}
+			}
+		})
+
 		setFileList(fileList)
+
 		console.log(result);
 	}
 
@@ -35,7 +45,22 @@ const Publish = () =>{
 	}
 
 	
-
+	//提交表单数据
+	const onFinishForm = (result) =>{
+		console.log(result) 	//🌟步骤一：先看一下返回了什么数据
+		//步骤二：解构出数据, 做数据的二次处理, 处理 cover 图片的上传数据
+		const { channel_id, content, title, type  } = result
+		const params = { //存放数据
+			channel_id,
+			content,
+			title,
+			type,
+			cover:{
+				type: type,
+				images:[]
+			}
+		}
+	}
 
 
 	return(
@@ -52,12 +77,14 @@ const Publish = () =>{
 						</Breadcrumb.Item>
 					</Breadcrumb>}>
 						
-				{/* 总的表单,🔥🔥🔥onFinish 是用来搜集表单组件内的所有值(这里用来搜集富文本编辑器的值)  */}
+				{/* 总的表单,🔥🔥🔥onFinishForm 是用来搜集表单组件内的所有值(这里包含了搜集富文本编辑器的值)  */}
 				<Form 
 					labelCol={{span:4 }}  
 					wrapperCol={{span:16}} 
 					//👇输入框的初始化值 
-					initialValues={{type:1, content:'this is content' }}>
+					initialValues={{type:1, content:'this is content' }}
+					onFinish={onFinishForm}//收集表单的数据
+					>
 
 					{/* 输入框 1 */}
 					<Form.Item 
