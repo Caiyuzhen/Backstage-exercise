@@ -1,15 +1,17 @@
 import './index.scss'
+import 'react-quill/dist/quill.snow.css';
 import {Card,Breadcrumb,Form,Button,Radio,Input,Upload,Space,Select} from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import { useStore } from '@/store';
 import { observer } from 'mobx-react-lite';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { http } from '@/utils'
 
 
 // function Publish(){}
+
 
 //🔥🔥记得解构出下拉菜单的选项！
 const { Option } = Select
@@ -19,37 +21,68 @@ const Publish = () =>{
 
 	const { channelStore } = useStore()
 
-	const[fileList, setFileList] = useState([])//存放上传图片的列表(图片是一个数组)
-	const onUploadChange = (result) =>{//上传图片的方法，接收返回值,后端会返回一个对象，包含 url 
+	//控制上传图片的列表，临时存储图片(图片是一个数组),🌟fileList 控制图片存 1 张 3 张还是不存
+	const[fileList, setFileList] = useState([])
+
+	//🌟🌟11.用 ref 当图片的暂存仓库（存到内存，存放已经上传的图片，会一直存在内存中，不受切换视图的影响
+	const cacheImgList = useRef([])
+
+
+
+	//上传图片的方法，接收返回值,后端会返回一个对象，包含 url 
+	const onUploadChange = ({result}) => {
 		//上传成功后，回调返回 url
-		const fileList = result.filesList.map(file => {
-			if(file.response){
-				return{
-					url: file.response.data.url
-				}
+		const formatList = result.map(file => {
+			// 上传完毕 做数据处理
+			if (file.response) {
+			  return {
+				url: file.response.data.url
+			  }
 			}
-		})
-
-		setFileList(fileList)
-
-		console.log(result);
+			// 否则在上传中时，不做处理
+			return file
+		  })
+		console.log(formatList);
+		setFileList(formatList)
+		cacheImgList.current = formatList //🌟22.存多一份数据
 	}
 
 
-	//下面两个函数都是控制试图显示的
+
+
+
+
+	//切换图片：下面两个函数都是控制视图显示的
 	const [imgCount,setImageCount] = useState(1)//切换图片的 hook 
-
 	const radioChange = (radioData) => {//⚡️切换图片的方法
-		// console.log(radioData.target.value)
-		setImageCount(radioData.target.value)
+
+		const rawValue = radioData.target.value // 当前选中的 radio 值
+		setImageCount(rawValue)
+
+
+		//33.从 ref 仓库中取出图片并交给 fileList 来重新渲染图片
+		if( rawValue === 0 ){
+			return false
+		}
+		if( rawValue === 1 ){//radio 为 1，则取 1 张图片
+			const img = cacheImgList.current  ?  cacheImgList.current[0]  :  [] //🌟🌟切换 radio 时，如果有暂存数据，则取暂存的数据，没有则取空数组
+			setFileList([img])//以数组的形式存入 fileList
+		} else if ( rawValue === 3 ){//radio 为 3，则取 所有 图片
+			setFileList(cacheImgList.current)	
+		}
 	}
+
+
 
 	
-	//提交表单数据
-	const onFinishForm = (result) =>{
-		console.log(result) 	//🌟步骤一：先看一下返回了什么数据
+	//提交表单数据(⚡️⚡️先处理拿到的数据，再调接口发送请求)
+	const onFinishForm = async (result) =>{
+		//🌟步骤一：先看一下返回了什么数据
+		console.log(result) 
+
 		//步骤二：解构出数据, 做数据的二次处理, 处理 cover 图片的上传数据
 		const { channel_id, content, title, type  } = result
+		
 		const params = { //存放数据
 			channel_id,
 			content,
@@ -57,10 +90,14 @@ const Publish = () =>{
 			type,
 			cover:{
 				type: type,
-				images:[]
+				images: fileList.map( file => file.response.data.url )//提取图片列表
 			}
 		}
+		console.log(params)
+		//步骤三：调接口发送请求
+		await http.post('/mp/articles?draft=false',params)
 	}
+
 
 
 	return(
@@ -83,7 +120,7 @@ const Publish = () =>{
 					wrapperCol={{span:16}} 
 					//👇输入框的初始化值 
 					initialValues={{type:1, content:'this is content' }}
-					onFinish={onFinishForm}//收集表单的数据
+					onFinish={onFinishForm}//收集表单的所有数据
 					>
 
 					{/* 输入框 1 */}
