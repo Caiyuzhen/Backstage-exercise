@@ -6,7 +6,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import ReactQuill from 'react-quill';
 import { useStore } from '@/store';
 import { observer } from 'mobx-react-lite';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { http } from '@/utils'
 
 
@@ -29,10 +29,10 @@ const Publish = () =>{
 
 
 
-	//上传图片的方法，接收返回值,后端会返回一个对象，包含 url 
-	const onUploadChange = ({result}) => {
+	//上传图片的方法，从 fileList 中提取返回值,会返回三个对象，最后一个成功的对象包含 url 
+	const onUploadChange = ({ fileList }) => {
 		//上传成功后，回调返回 url
-		const formatList = result.map(file => {
+		const formatList = fileList.map(file => {
 			// 上传完毕 做数据处理
 			if (file.response) {
 			  return {
@@ -55,18 +55,23 @@ const Publish = () =>{
 	//切换图片：下面两个函数都是控制视图显示的
 	const [imgCount,setImageCount] = useState(1)//切换图片的 hook 
 	const radioChange = (radioData) => {//⚡️切换图片的方法
-
+		//切换【数量的 radio 视图】
 		const rawValue = radioData.target.value // 当前选中的 radio 值
 		setImageCount(rawValue)
 
 
-		//33.从 ref 仓库中取出图片并交给 fileList 来重新渲染图片
-		if( rawValue === 0 ){
+		//33.从 ref 仓库中取出图片并交给 fileList 来重新【渲染图片】
+		
+		// 无图模式
+		if( cacheImgList.current.length === 0 ){ 
 			return false
 		}
+		// 1 图模式
 		if( rawValue === 1 ){//radio 为 1，则取 1 张图片
-			const img = cacheImgList.current  ?  cacheImgList.current[0]  :  [] //🌟🌟切换 radio 时，如果有暂存数据，则取暂存的数据，没有则取空数组
+			// 写法二：const img = cacheImgList.current  ?  cacheImgList.current[0]  :  [] //🌟🌟切换 radio 时，如果有暂存数据，则取暂存的数据，没有则取空数组
+			const img = cacheImgList.current[0]
 			setFileList([img])//以数组的形式存入 fileList
+		// 3 图模式
 		} else if ( rawValue === 3 ){//radio 为 3，则取 所有 图片
 			setFileList(cacheImgList.current)	
 		}
@@ -100,6 +105,26 @@ const Publish = () =>{
 
 
 
+	//✏️✏️从文章列表进入详情页的编辑态
+	//111.路由参数 id 来判断是哪一页, 用 useSearchParams() 方法
+	const [params] = useSearchParams()
+	const id = params.get('id')//取参 id
+	console.log(id)
+
+	//🔗🔗数据回填(👉把原先的数据拷贝回编辑页中），用 id 调用接口  => 1.回填表单  2.回填暂存列表  3.回填Upload 组件的 fileList
+	useEffect(() => {
+		const loadDetail = async () => {
+			await http.get(`/mp/articles/${id}`) //携带 id 参数发送请求，回填详情页的数据
+		}
+		//必须有 id 才发送请求(编辑态)
+		if (id) {
+			loadDetail()
+		}
+	},[id])//在 id 变化之后重新请求数据，不过这里只请求一次就行了，写了 id 也没关系
+
+
+
+
 	return(
 		<div className='publish'>
 			<Card
@@ -110,7 +135,8 @@ const Publish = () =>{
 							<Link to="/home">Home</Link>
 						</Breadcrumb.Item>
 						<Breadcrumb.Item>	
-							Publish Article
+							{/* 222.判断 header 标题是【发布】还是【编辑】的文案 */}
+							{ id ? '编辑文章' : '发布文章' }
 						</Breadcrumb.Item>
 					</Breadcrumb>}>
 						
@@ -140,7 +166,7 @@ const Publish = () =>{
 
 								{/* 渲染 api 返回的 channel 数据 */}
 								{channelStore.channelList.map( channel => 
-									<Option value={channel.id} key={channel.id}> {channel.name} </Option>
+									(<Option value={channel.id} key={channel.id}> {channel.name} </Option>)
 								)}
 							</Select>
 					</Form.Item>
@@ -171,7 +197,8 @@ const Publish = () =>{
 								>
 									{/* icon */}
 									<div style={{ marginTop: 8 }}><PlusOutlined/></div>
-							</Upload>)}
+							</Upload>
+							)}
 					</Form.Item>
 					
 					<Form.Item
@@ -186,7 +213,8 @@ const Publish = () =>{
 					<Form.Item wrapperCol={{ offset: 4 }}>
 						<Space>
 							<Button size="large" type="primary" htmlType="submit">
-								发布文章
+								{/* 3.判断 Button 标题是【发布】还是【编辑】的文案 */}
+								{ id ? '编辑文章' : '发布文章' }
 							</Button>
 						</Space>
 					</Form.Item>

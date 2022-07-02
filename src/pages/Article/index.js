@@ -47,11 +47,13 @@ const Article = () =>{
 		count:0		//文章总数，结合下边的 table 分页来配置！（⚡️总数 / 每页显示的数量）
 	})
 
+
 	//步骤一(2): 参数管理：（状态、分页）会影响到 table 列表的数据变化的都需要定义一个变量来管理
 	const [params, setParams] = useState({ //params 用作 api 发送请求的携带参数
 		page:1,			//当前页
 		per_page:5,	//每页显示条数, 结合下边的 table 分页来配置！（⚡️总数 / 每页显示的数量）
 	})
+
 
 
 	useEffect(() => {
@@ -73,6 +75,7 @@ const Article = () =>{
 		}
 		loadTableList()
 	},[params]) //删选、过滤的本质也是修改依赖项，让 useEffect 重新调接口
+
 
 
 
@@ -104,15 +107,7 @@ const Article = () =>{
 	
 	}
 	
-	
-	//🔥🔥🔥点击分页器改变当前页面的事件
-	const pageChange = (page) => { //ant 会返回当前 page 的值
-	
-		setParams({ //一变化就会重新发送请求
-			...params,
-			page //🔥把新的 page 输入传回给 params，这样重新渲染为当前对应的分页（因为依赖项是 params 的变化！）
-		})
-	}
+
 
 
 	//❌删除 table 内 Article 数据的方法
@@ -121,7 +116,7 @@ const Article = () =>{
 		console.log(data);
 		console.log("成功发送删除接口")
 
-		//删除后更新视图
+		//删除后更新视图(刷新列表)
 		setParams({
 			...params,
 			page:1 //删除后重新获取第一页数据
@@ -136,6 +131,28 @@ const Article = () =>{
 		//跳转到编辑页
 		navigate(`/publish?id=${data.id}`) //传入当前的列表 id
 	}
+
+	//审核文章，方法二，在外部写函数，在 json 内写  render: data => formatStatus(data)
+	// const formatStatus = (type) => {
+	// 	const TYPES = {
+	// 	  1: <Tag color="red">审核失败</Tag>,
+	// 	  2: <Tag color="green">审核成功</Tag>
+	// 	}
+	// 	return TYPES[type]
+	//   }
+	
+
+		
+	//🔥🔥🔥点击分页器改变当前页面的事件
+	const pageChange = (page) => { //ant 会返回当前 page 的值
+	
+		setParams({ //一变化就会重新发送请求
+			...params,
+			page //🔥把新的 page 输入传回给 params，这样重新渲染为当前对应的分页（因为依赖项是 params 的变化！）
+		})
+	}
+
+
 
 	
 	
@@ -239,19 +256,19 @@ const Article = () =>{
 				title={
 					<Breadcrumb separator=">">
 						{/* 🍞面包屑导航 */}
-						<Breadcrumb.Item>  <Link to="/"> Home </Link>  
+						<Breadcrumb.Item>  <Link to="/home"> Home </Link>  
 						</Breadcrumb.Item>
-						<Breadcrumb> Context Management </Breadcrumb>
+						<Breadcrumb> 内容管理 </Breadcrumb>
 					</Breadcrumb>
 				}
 				style={{ margin:"0.75rem", marginBottom:"1.5rem", borderRadius:"1rem"}}
 				>
 					
 				{/* 过滤项, 🔥🔥🔥onFinish 是用来搜集表单组件内的所有值 */}
-				<Form  onFinish={onFilter} initialValues={{status:null}}>
+				<Form  onFinish={onFilter}  initialValues={{status:null}}>
 					<Form.Item babel="状态" name="status" style={{marginLeft:"0.75rem"}}>
 						<Radio.Group>
-							<Radio value={null}>All</Radio>
+							<Radio value={[]}>All</Radio>
 							<Radio value={0}>Draft</Radio>
 							<Radio value={1}>Pending</Radio>
 							<Radio value={2}>Approved</Radio>
