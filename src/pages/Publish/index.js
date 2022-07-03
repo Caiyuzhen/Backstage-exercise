@@ -1,6 +1,6 @@
 import './index.scss'
 import 'react-quill/dist/quill.snow.css';
-import {Card,Breadcrumb,Form,Button,Radio,Input,Upload,Space,Select} from 'antd'
+import {Card,Breadcrumb,Form,Button,Radio,Input,Upload,Space,Select, message} from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import ReactQuill from 'react-quill';
@@ -33,13 +33,13 @@ const Publish = () =>{
 	const onUploadChange = ({ fileList }) => {
 		//需数据格式化, 上传成功后, 回调返回 url
 		const formatList = fileList.map(file => {
-			// 上传完毕 做数据处理
-			if (file.response) {
+			// 上传完毕后, 做数据格式的处理, 把 response 处理成 url
+			if (file.response) { //因为上传完毕后，response 才存在, 所以判断 response 是否存在
 			  return {
 				url: file.response.data.url
 			  }
 			}
-			// 否则在上传中时，不做处理
+			// 否则就是在上传中的状态,则不做处理
 			return file
 		  })
 		// console.log(formatList);
@@ -80,7 +80,7 @@ const Publish = () =>{
 
 
 	
-	//提交表单数据(⚡️⚡️先处理拿到的数据，再调接口发送请求)
+	//提交表单数据(⚡️⚡️先处理拿到的数据，再调接口发送接口请求【新增接口】、【更新接口】)
 	const navigate = useNavigate()
 	const onFinishForm = async (result) =>{
 		//🌟步骤一：先看一下返回了什么数据
@@ -99,15 +99,29 @@ const Publish = () =>{
 				images: fileList.map( file => file.url )//提取图片列表
 			}
 		}
-		console.log(params)
-		//步骤三：调接口发送请求
-		await http.post('/mp/articles?draft=false',params)
+		// console.log(params)
+
+		if(id){
+			//有 id 则是编辑态，更新内容
+			await http.put(`/mp/articles/${id}?draft=false`,params)
+			// navigate('/article')
+			// message.success('更新成功')
+
+		}else{
+			//没有 id 则是新增
+			//步骤三：调接口发送请求
+			await http.post('/mp/articles?draft=false',params)//【新增接口】
+			// navigate('/article')
+			// message.success('发布成功')
+		}
+		navigate('/article')
+		message.success(`${id ? '更新成功' : '发布成功'}`) //判断有没有 id （ 是编辑态还是新增态 ）
 	}
 
 
 
-	//✏️✏️从文章列表进入详情页的编辑态
-	//111.路由参数 id 来判断是哪一页, 用 useSearchParams() 方法
+	//✏️✏️从文章列表进入详情页的【编辑态】
+	//111.路由参数 id 来判断是哪一页, 用 useSearchParams() 方法， 此外这个 id 也可以判断是【新增】、还是【编辑】
 	const [params] = useSearchParams()
 	const id = params.get('id')//取参 id
 	console.log(id)
@@ -132,12 +146,16 @@ const Publish = () =>{
 			//setFileList 回填【图片】
 			setFileList(resData.cover.images.map(url => {
 				return{
-					url: url //返回一个对象格式的数组
+					url
 				}
 			})) //回填图片列表(通过一个数组生成新数组，就用 map 方法)
 
-			//回填暂存图片 radio 列表的数据, 需要重新处理数据格式
-			cacheImgList.current = resData.cover.images
+			//回填暂存图片 radio 列表的数据, 需要重新处理数据格式,和暂存列表的数据格式保持一致
+			cacheImgList.current = resData.cover.images.map(url => {
+				return{
+					url
+				}
+			})
 		}
 
 
