@@ -4,6 +4,7 @@ import { EditOutlined, DeleteOutlined, LogoutOutlined } from '@ant-design/icons'
 import 'moment/locale/zh-cn'//配置成中文
 import locale from 'antd/es/date-picker/locale/zh_CN'//配置成当地的语言-中文
 import './index.scss'
+
 import img404 from '@/assets/placeholde-error.png'
 import { useEffect, useState } from 'react'
 import { http } from '@/utils'
@@ -56,6 +57,7 @@ const Article = () =>{
 
 
 
+	//携带参数调用后端接口拿到数据
 	useEffect(() => {
 		//步骤二: 声明一个异步函数调用后端接口（🌟传参的方式, 有依赖项 params, 需要写在 useEffect 内部[原则: 只要异步函数内涉及到需要依赖一些数据的变化而重新执行的，都要放到 useEffect 内）
 		//⚡️⚡️⚡️这种情况如果写到函数外边的话，每次组件更新都会重新进行 useEffect 函数的初始化，这会非常消耗性能！！写到 useEffect 中，只有依赖项变化才会执行函数
@@ -124,6 +126,7 @@ const Article = () =>{
 	}
 
 
+	
 	//🖌跳转到 article 去编辑
 	const navigate = useNavigate()//🔥🔥🔥🔥🔥注意，【hook 函数】只能放在函数外边，不能放里边！
 
@@ -164,7 +167,7 @@ const Article = () =>{
 			dataIndex: 'cover',
 			width:120,
 			render:cover=>{
-				return <img src={ cover || img404 } width={148} height={98} alt="" style={{borderRadius:12}}/>
+				return <img src={ cover.images[0]  || img404 } width={128} height={98} alt=""/>
 			}
 		},
 		{
@@ -331,10 +334,3 @@ const Article = () =>{
 
 // export default Article
 export default observer(Article)//注意，实时同步 mobx 的数据要加 observe
-
-
-
-
-
-
-

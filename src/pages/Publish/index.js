@@ -31,7 +31,7 @@ const Publish = () =>{
 
 	//上传图片的方法，从 fileList 中提取返回值,会返回三个对象，最后一个成功的对象包含 url 
 	const onUploadChange = ({ fileList }) => {
-		//上传成功后，回调返回 url
+		//需数据格式化, 上传成功后, 回调返回 url
 		const formatList = fileList.map(file => {
 			// 上传完毕 做数据处理
 			if (file.response) {
@@ -42,7 +42,7 @@ const Publish = () =>{
 			// 否则在上传中时，不做处理
 			return file
 		  })
-		console.log(formatList);
+		// console.log(formatList);
 		setFileList(formatList)
 		cacheImgList.current = formatList //🌟22.存多一份数据
 	}
@@ -53,7 +53,7 @@ const Publish = () =>{
 
 
 	//切换图片：下面两个函数都是控制视图显示的
-	const [imgCount,setImageCount] = useState(1)//切换图片的 hook 
+	const [imgCount, setImageCount] = useState(1)//切换图片的 hook 
 	const radioChange = (radioData) => {//⚡️切换图片的方法
 		//切换【数量的 radio 视图】
 		const rawValue = radioData.target.value // 当前选中的 radio 值
@@ -81,6 +81,7 @@ const Publish = () =>{
 
 	
 	//提交表单数据(⚡️⚡️先处理拿到的数据，再调接口发送请求)
+	const navigate = useNavigate()
 	const onFinishForm = async (result) =>{
 		//🌟步骤一：先看一下返回了什么数据
 		console.log(result) 
@@ -95,7 +96,7 @@ const Publish = () =>{
 			type,
 			cover:{
 				type: type,
-				images: fileList.map( file => file.response.data.url )//提取图片列表
+				images: fileList.map( file => file.url )//提取图片列表
 			}
 		}
 		console.log(params)
@@ -111,14 +112,39 @@ const Publish = () =>{
 	const id = params.get('id')//取参 id
 	console.log(id)
 
+
+
+
+
 	//🔗🔗数据回填(👉把原先的数据拷贝回编辑页中），用 id 调用接口  => 1.回填表单  2.回填暂存列表  3.回填Upload 组件的 fileList
+	//🌟1-1.获取 form 的实例对象
+	const form = useRef(null)
+
 	useEffect(() => {
 		const loadDetail = async () => {
-			await http.get(`/mp/articles/${id}`) //携带 id 参数发送请求，回填详情页的数据
+			const res = await http.get(`/mp/articles/${id}`) //携带 id 参数发送请求，拿到详情页的数据来回填
+
+			//🌟1-3.回填【列表】+【图片】数据到 form 实例对象内, 里边也存放了 cover 的 URL 数据, 要处理一下
+			// console.log("列表数据",res)
+			const resData = res.data  //取出列表的 data 数据
+			//setFieldsValue 回填列表
+			form.current.setFieldsValue({...resData, type: resData.cover.type})  //💥💥用一个对象包括来{直接传参 + 解构传参}的写法！
+			//setFileList 回填【图片】
+			setFileList(resData.cover.images.map(url => {
+				return{
+					url: url //返回一个对象格式的数组
+				}
+			})) //回填图片列表(通过一个数组生成新数组，就用 map 方法)
+
+			//回填暂存图片 radio 列表的数据, 需要重新处理数据格式
+			cacheImgList.current = resData.cover.images
 		}
-		//必须有 id 才发送请求(编辑态)
+
+
+		//必须有 article id 才会发送请求(编辑态)
 		if (id) {
 			loadDetail()
+			// console.log(form.current)   //看一下 form 实例对象的 current 属性有什么方法
 		}
 	},[id])//在 id 变化之后重新请求数据，不过这里只请求一次就行了，写了 id 也没关系
 
@@ -147,6 +173,8 @@ const Publish = () =>{
 					//👇输入框的初始化值 
 					initialValues={{type:1, content:'this is content' }}
 					onFinish={onFinishForm}//收集表单的所有数据
+					//🌟1-2.绑定 form 的实例对象
+					ref={form}
 					>
 
 					{/* 输入框 1 */}
